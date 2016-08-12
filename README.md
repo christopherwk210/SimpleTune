@@ -1,5 +1,5 @@
 # SimpleTune
-SimpleTune is a small JS library for making simple tunes.
+SimpleTune is a small JS library for playing single notes using the WebAudio API.
 
 # Why SimpleTune over other audio libraries?
 There are many great WebAudio libraries out there, but I often found that I only needed to play a few notes here or there. Many existing libraries include advanced functionality that I don't need, so I created SimpleTune to provide a small and easy way to quickly generate a few notes.
