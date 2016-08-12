@@ -1,7 +1,7 @@
 {
   "name": "SimpleTune",
   "version": "0.1.0",
-  "description": "A small JS library for making simple tunes.",
+  "description": "SimpleTune is a small JS library for playing single notes using the WebAudio API.",
   "author": "Chris Anselmo",
   "devDependencies": {
     "grunt": "~0.4.5",
