@@ -12,6 +12,7 @@ var SimpleTune = function(type) {
   //State & Control
   this.isPlaying = false;
   this.timeout = 0;
+  this.volume = 1;
 
   //Define valid waves
   this.waveTypes = [
@@ -479,11 +480,13 @@ var SimpleTune = function(type) {
   //Gain
   this.gain = this.audioCtx.createGain();
   this.gain.connect(this.audioCtx.destination);
+  this.gain.gain.value = 0;
 
   //Osc
   this.oscillator = this.audioCtx.createOscillator();
   this.oscillator.type = this.waveType;
   this.oscillator.start();
+  this.oscillator.connect(this.gain);
 
   //Audio context getter
   this.getAudio = function() {
@@ -507,14 +510,14 @@ var SimpleTune = function(type) {
 
   //Gain changer
   this.setGain = function(gain) {
-    this.gain.gain.value = gain;
+    this.volume = gain;
   };
 
   //Stops any playing audio
   this.stop = function() {
     if (this.isPlaying === true) {
       clearTimeout(this.timeout);
-      this.oscillator.disconnect(this.gain);
+      this.gain.gain.value = 0;
       this.isPlaying = false;
     }
   };
@@ -547,15 +550,16 @@ var SimpleTune = function(type) {
     //If a sound is playing already, stop it and clear timeout
     if (this.isPlaying === true) {
       clearTimeout(this.timeout);
-      this.oscillator.disconnect(this.gain);
+      this.gain.gain.value = 0;
     }
+
+    //Connect the osc
+    this.gain.gain.value = this.volume;
+    this.isPlaying = true;
 
     //Set the freq
     this.oscillator.frequency.value = freq;
-
-    //Connect the osc
-    this.oscillator.connect(this.gain);
-    this.isPlaying = true;
+    this.oscillator.frequency.setValueAtTime(freq, 0 );
 
     //Disconnect the osc in duration if > 0
     if (duration > 0) {
@@ -563,8 +567,8 @@ var SimpleTune = function(type) {
 
       //Return promise
       return new Promise(function(resolve, reject) {
-        this.timeout = setTimeout(function() {
-          that.oscillator.disconnect(this.gain);
+        that.timeout = setTimeout(function() {
+          that.gain.gain.value = 0;
           that.isPlaying = false;
           resolve({
             audio: that.audioCtx,
