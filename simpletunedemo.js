@@ -1,0 +1,1 @@
+var myTune=new SimpleTune("triangle");myTune.setGain(.5),$(document).ready(function(){$("#random-note").click(function(){myTune.playNote("A4",50)}),$("#long-note").click(function(){myTune.playNote(440,1e3)}),$("#promise-note").click(function(){myTune.playNote("G4",1e3).then(function(){alert("Done!")})})});
